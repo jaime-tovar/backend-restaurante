@@ -5,7 +5,6 @@ from pydantic import BaseModel
 
 
 class FacturaBase(BaseModel):
-    id_orden: UUID
     subtotal: float
     descuento: float = 0.0
     total: float
@@ -13,6 +12,7 @@ class FacturaBase(BaseModel):
 
 
 class FacturaCreate(FacturaBase):
+    id_orden: UUID
     pass
 
 
