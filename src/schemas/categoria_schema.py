@@ -14,8 +14,7 @@ class CategoriaCreate(CategoriaBase):
 
 
 class CategoriaUpdate(CategoriaBase):
-    descripcion: str
-    activo: bool
+    pass
 
 
 class CategoriaResponse(CategoriaBase):
