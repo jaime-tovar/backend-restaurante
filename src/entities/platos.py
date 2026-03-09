@@ -32,7 +32,7 @@ class Plato(Base):
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_modificacion = Column(DateTime(timezone=True), onupdate=func.now())
 
-    # Relación con categoria
+    # Relaciones
     categoria = relationship("Categoria", back_populates="platos")
     detalles = relationship(
         "DetalleOrden", back_populates="plato", cascade="all, delete-orphan"
