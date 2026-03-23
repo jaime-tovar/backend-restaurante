@@ -9,13 +9,6 @@ from src.database.config import Base
 
 
 class Reservacion(Base):
-    """
-    Modelo que representa las reservaciones del restaurante.
-
-    Permite asociar un cliente a una mesa en una fecha
-    determinada y controlar el estado de la reservación.
-    """
-
     __tablename__ = "reservaciones"
 
     id_reservacion = Column(
@@ -39,9 +32,20 @@ class Reservacion(Base):
 
     fecha = Column(DateTime(timezone=True), nullable=False)
     estado = Column(String(20), nullable=True, default="pendiente")
+
+    # Auditoría
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_modificacion = Column(DateTime(timezone=True), onupdate=func.now())
+
+    id_usuario_creacion = Column(
+        UUID(as_uuid=True), ForeignKey("usuario.id_usuario"), nullable=False
+    )
+    id_usuario_edita = Column(
+        UUID(as_uuid=True), ForeignKey("usuario.id_usuario"), nullable=True
+    )
 
     # Relaciones
     cliente = relationship("Cliente", back_populates="reservaciones")
     mesa = relationship("Mesa", back_populates="reservaciones")
+    usuario_creacion = relationship("Usuario", foreign_keys=[id_usuario_creacion])
+    usuario_edita = relationship("Usuario", foreign_keys=[id_usuario_edita])

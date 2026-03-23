@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database.config import get_db
-from src.entities.metodos_pago import MetodoPago
-from src.schemas.metodo_pago_schema import (
+from src.entities.metodo_pago import MetodoPago
+from src.schemas.metodo_pago import (
     MetodoPagoCreate,
     MetodoPagoResponse,
     MetodoPagoUpdate,

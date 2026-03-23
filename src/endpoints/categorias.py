@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database.config import get_db
-from src.entities.categorias import Categoria
-from src.schemas.categoria_schema import (
+from src.entities.categoria import Categoria
+from src.schemas.categoria import (
     CategoriaCreate,
     CategoriaUpdate,
     CategoriaResponse,

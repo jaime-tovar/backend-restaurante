@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.database.config import get_db
 from src.entities.detalle_orden import DetalleOrden
-from src.schemas.detalle_orden_schema import (
+from src.schemas.detalle_orden import (
     DetalleOrdenCreate,
     DetalleOrdenUpdate,
     DetalleOrdenResponse,

@@ -11,25 +11,25 @@ from src.database.config import create_tables
 from src.endpoints import (
     categorias,
     clientes,
-    detalle_orden,
-    orden,
+    detalles_orden,
+    metodos_pago,
+    ordenes,
     platos,
     facturas,
     mesas,
-    metodo_pago,
     reservaciones,
 )
 
 # Importar modelos para que Base.metadata los conozca
-import src.entities.categorias
-import src.entities.clientes
+import src.entities.categoria
+import src.entities.cliente
 import src.entities.detalle_orden
-import src.entities.ordenes
-import src.entities.platos
-import src.entities.facturas
-import src.entities.mesas
-import src.entities.metodos_pago
-import src.entities.reservaciones
+import src.entities.orden
+import src.entities.plato
+import src.entities.factura
+import src.entities.mesa
+import src.entities.metodo_pago
+import src.entities.reservacion
 
 
 @asynccontextmanager
@@ -47,12 +47,12 @@ app = FastAPI(
 
 app.include_router(categorias.router)
 app.include_router(clientes.router)
-app.include_router(detalle_orden.router)
-app.include_router(orden.router)
+app.include_router(detalles_orden.router)
+app.include_router(ordenes.router)
 app.include_router(platos.router)
 app.include_router(facturas.router)
 app.include_router(mesas.router)
-app.include_router(metodo_pago.router)
+app.include_router(metodos_pago.router)
 app.include_router(reservaciones.router)
 
 

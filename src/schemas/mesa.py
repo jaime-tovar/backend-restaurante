@@ -11,11 +11,14 @@ class MesaBase(BaseModel):
 
 
 class MesaCreate(MesaBase):
-    pass
+    id_usuario_creacion: UUID
 
 
 class MesaUpdate(MesaBase):
-    pass
+    numero_mesa: int | None = None
+    capacidad: int | None = None
+    estado: str | None = None
+    id_usuario_edita: UUID
 
 
 class MesaResponse(MesaBase):
