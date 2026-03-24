@@ -1,24 +1,25 @@
-from src.schemas.categoria_schema import (
+from src.schemas.categoria import (
     CategoriaCreate,
     CategoriaUpdate,
     CategoriaResponse,
 )
-from src.schemas.cliente_schema import ClienteCreate, ClienteUpdate, ClienteResponse
-from src.schemas.detalle_orden_schema import DetalleOrdenCreate, DetalleOrdenResponse
-from src.schemas.factura_schema import FacturaCreate, FacturaResponse
-from src.schemas.mesa_schema import MesaCreate, MesaUpdate, MesaResponse
-from src.schemas.metodo_pago_schema import (
+from src.schemas.cliente import ClienteCreate, ClienteUpdate, ClienteResponse
+from src.schemas.detalle_orden import DetalleOrdenCreate, DetalleOrdenResponse
+from src.schemas.factura import FacturaCreate, FacturaResponse
+from src.schemas.mesa import MesaCreate, MesaUpdate, MesaResponse
+from src.schemas.metodo_pago import (
     MetodoPagoCreate,
     MetodoPagoUpdate,
     MetodoPagoResponse,
 )
-from src.schemas.orden_schema import OrdenCreate, OrdenResponse, OrdenUpdate
-from src.schemas.plato_schema import PlatoCreate, PlatoResponse, PlatoUpdate
-from src.schemas.reservacion_schema import (
+from src.schemas.orden import OrdenCreate, OrdenResponse, OrdenUpdate
+from src.schemas.plato import PlatoCreate, PlatoResponse, PlatoUpdate
+from src.schemas.reservacion import (
     ReservacionCreate,
     ReservacionResponse,
     ReservacionUpdate,
 )
+from src.schemas.usuario import UsuarioCreate, UsuarioResponse, UsuarioUpdate
 
 __all__ = [
     "CategoriaCreate",
@@ -46,4 +47,7 @@ __all__ = [
     "ReservacionCreate",
     "ReservacionResponse",
     "ReservacionUpdate",
+    "UsuarioCreate",
+    "UsuarioResponse",
+    "UsuarioUpdate",
 ]

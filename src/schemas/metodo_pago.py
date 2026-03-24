@@ -10,12 +10,13 @@ class MetodoPagoBase(BaseModel):
 
 
 class MetodoPagoCreate(MetodoPagoBase):
-    pass
+    id_usuario_creacion: UUID
 
 
 class MetodoPagoUpdate(MetodoPagoBase):
-    nombre: str
-    activo: bool
+    nombre: str | None = None
+    activo: bool | None = None
+    id_usuario_edita: UUID
 
 
 class MetodoPagoResponse(MetodoPagoBase):

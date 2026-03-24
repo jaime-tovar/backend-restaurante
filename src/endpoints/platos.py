@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database.config import get_db
-from src.entities.platos import Plato
-from src.schemas.plato_schema import PlatoCreate, PlatoUpdate, PlatoResponse
+from src.entities.plato import Plato
+from src.schemas.plato import PlatoCreate, PlatoUpdate, PlatoResponse
 
 router = APIRouter(prefix="/platos", tags=["Platos"])
 

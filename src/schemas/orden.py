@@ -6,16 +6,17 @@ from pydantic import BaseModel
 
 class OrdenBase(BaseModel):
     id_mesa: UUID
-    id_cliente: UUID | None
     estado: str = "pendiente"
 
 
 class OrdenCreate(OrdenBase):
-    pass
+    id_usuario_creacion: UUID
 
 
-class OrdenUpdate(BaseModel):
-    pass
+class OrdenUpdate(OrdenBase):
+    id_mesa: UUID | None = None
+    estado: str | None = None
+    id_usuario_edita: UUID
 
 
 class OrdenResponse(OrdenBase):

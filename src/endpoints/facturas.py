@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database.config import get_db
-from src.entities.facturas import Factura
-from src.schemas.factura_schema import FacturaCreate, FacturaUpdate, FacturaResponse
+from src.entities.factura import Factura
+from src.schemas.factura import FacturaCreate, FacturaUpdate, FacturaResponse
 
 router = APIRouter(prefix="/facturas", tags=["Facturas"])
 

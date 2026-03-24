@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database.config import get_db
-from src.entities.categorias import Categoria
-from src.schemas.categoria_schema import (
+from src.entities.categoria import Categoria
+from src.schemas.categoria import (
     CategoriaCreate,
     CategoriaUpdate,
     CategoriaResponse,
@@ -92,7 +92,11 @@ def eliminar_categoria(categoria_id: UUID, db: Session = Depends(get_db)):
     if not categoria:
         raise HTTPException(status_code=404, detail="Categoría no encontrada")
 
-    db.delete(categoria)
+    if not categoria.activo:
+        raise HTTPException(status_code=400, detail="La categoría ya está inactiva")
+
+    categoria.activo = False
+
     db.commit()
 
     return None

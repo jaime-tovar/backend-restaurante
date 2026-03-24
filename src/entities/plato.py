@@ -9,13 +9,6 @@ from src.database.config import Base
 
 
 class Plato(Base):
-    """
-    Modelo que representa los platos del restaurante.
-
-    Cada plato pertenece a una categoría y contiene
-    información descriptiva, precio y estado.
-    """
-
     __tablename__ = "platos"
 
     id_plato = Column(
@@ -29,11 +22,22 @@ class Plato(Base):
     descripcion = Column(Text, nullable=True)
     precio = Column(Numeric(10, 2), nullable=False)
     activo = Column(Boolean, default=True)
+
+    # Auditoría
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_modificacion = Column(DateTime(timezone=True), onupdate=func.now())
+
+    id_usuario_creacion = Column(
+        UUID(as_uuid=True), ForeignKey("usuario.id_usuario"), nullable=False
+    )
+    id_usuario_edita = Column(
+        UUID(as_uuid=True), ForeignKey("usuario.id_usuario"), nullable=True
+    )
 
     # Relaciones
     categoria = relationship("Categoria", back_populates="platos")
     detalles = relationship(
         "DetalleOrden", back_populates="plato", cascade="all, delete-orphan"
     )
+    usuario_creacion = relationship("Usuario", foreign_keys=[id_usuario_creacion])
+    usuario_edita = relationship("Usuario", foreign_keys=[id_usuario_edita])

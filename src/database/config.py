@@ -23,7 +23,7 @@ if not DATABASE_URL:
 # Crear el motor de SQLAlchemy
 engine = create_engine(
     DATABASE_URL,
-    echo=True,  # Cambiar a True para ver consultas SQL
+    echo=False,  # Cambiar a True para ver consultas SQL
     pool_pre_ping=True,  # Verificar conexión antes de usar
     pool_recycle=300,  # Reciclar conexiones cada 5 minutos
     connect_args={"sslmode": "require"},  # Requerir SSL para Neon
