@@ -21,7 +21,6 @@ from src.entities.metodo_pago import MetodoPago
 from src.entities.plato import Plato
 from src.entities.reservacion import Reservacion
 from src.entities.usuario import Usuario
-from src.entities.empleado import Empleado
 
 # Cargar .env desde la carpeta del proyecto (donde está init_db.py)
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))

@@ -8,7 +8,6 @@ from src.entities.orden import Orden
 from src.entities.plato import Plato
 from src.entities.reservacion import Reservacion
 from src.entities.usuario import Usuario
-from src.entities.empleado import Empleado
 
 __all__ = [
     "Categoria",
@@ -21,5 +20,4 @@ __all__ = [
     "Plato",
     "Reservacion",
     "Usuario",
-    "Empleado",
 ]

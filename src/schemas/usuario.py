@@ -1,27 +1,30 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class UsuarioBase(BaseModel):
-    id_empleado: UUID
+    nombre_completo: str
     username: str
-    password: str
-    rol: str
+    email: EmailStr
+    telefono: str
     activo: bool = True
 
 
 class UsuarioCreate(UsuarioBase):
-    id_usuario_creacion: UUID
+    password: str
+    rol: str
 
 
 class UsuarioUpdate(BaseModel):
+    nombre_completo: str | None = None
+    email: EmailStr | None = None
+    telefono: str | None = None
     username: str | None = None
     password: str | None = None
     rol: str | None = None
     activo: bool | None = None
-    id_usuario_edita: UUID
 
 
 class UsuarioResponse(UsuarioBase):
@@ -30,8 +33,6 @@ class UsuarioResponse(UsuarioBase):
     activo: bool
     fecha_creacion: datetime
     fecha_modificacion: datetime | None = None
-    id_usuario_creacion: UUID
-    id_usuario_edita: UUID | None = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

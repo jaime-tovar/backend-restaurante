@@ -20,7 +20,6 @@ from src.schemas.reservacion import (
     ReservacionUpdate,
 )
 from src.schemas.usuario import UsuarioCreate, UsuarioResponse, UsuarioUpdate
-from src.schemas.empleado import EmpleadoCreate, EmpleadoResponse, EmpleadoUpdate
 
 __all__ = [
     "CategoriaCreate",
@@ -51,7 +50,4 @@ __all__ = [
     "UsuarioCreate",
     "UsuarioResponse",
     "UsuarioUpdate",
-    "EmpleadoCreate",
-    "EmpleadoResponse",
-    "EmpleadoUpdate",
 ]

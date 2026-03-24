@@ -92,7 +92,11 @@ def eliminar_categoria(categoria_id: UUID, db: Session = Depends(get_db)):
     if not categoria:
         raise HTTPException(status_code=404, detail="Categoría no encontrada")
 
-    db.delete(categoria)
+    if not categoria.activo:
+        raise HTTPException(status_code=400, detail="La categoría ya está inactiva")
+
+    categoria.activo = False
+
     db.commit()
 
     return None

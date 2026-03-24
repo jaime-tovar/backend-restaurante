@@ -18,6 +18,7 @@ from src.endpoints import (
     facturas,
     mesas,
     reservaciones,
+    usuarios,
 )
 
 # Importar modelos para que Base.metadata los conozca
@@ -30,6 +31,7 @@ import src.entities.factura
 import src.entities.mesa
 import src.entities.metodo_pago
 import src.entities.reservacion
+import src.entities.usuario
 
 
 @asynccontextmanager
@@ -45,6 +47,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.include_router(usuarios.router)
 app.include_router(categorias.router)
 app.include_router(clientes.router)
 app.include_router(detalles_orden.router)
