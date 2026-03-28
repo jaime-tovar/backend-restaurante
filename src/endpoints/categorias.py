@@ -34,10 +34,8 @@ def obtener_categoria(categoria_id: UUID, db: Session = Depends(get_db)):
 @router.post("", response_model=CategoriaResponse, status_code=201)
 def crear_categoria(dato: CategoriaCreate, db: Session = Depends(get_db)):
 
-    # validar que no exista la descripción
-    existe = (
-        db.query(Categoria).filter(Categoria.descripcion == dato.descripcion).first()
-    )
+    # validar que no exista el nombre
+    existe = db.query(Categoria).filter(Categoria.nombre == dato.nombre).first()
 
     if existe:
         raise HTTPException(
@@ -46,7 +44,8 @@ def crear_categoria(dato: CategoriaCreate, db: Session = Depends(get_db)):
         )
 
     categoria = Categoria(
-        descripcion=dato.descripcion,
+        nombre=dato.nombre,
+        id_usuario_creacion=dato.id_usuario_creacion,
         activo=dato.activo,
     )
 

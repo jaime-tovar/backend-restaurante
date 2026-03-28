@@ -1,8 +1,10 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from src.core.exceptions import ConflictError, NotFoundError
+from src.core.responses import success_response
 from src.database.config import get_db
 from src.entities.usuario import Usuario
 from src.schemas.usuario import (
@@ -15,33 +17,31 @@ from src.utils.security import hash_password
 router = APIRouter(prefix="/usuarios", tags=["usuarios"])
 
 
-@router.get("", response_model=list[UsuarioResponse])
+@router.get("")
 def listar_usuarios(db: Session = Depends(get_db)):
-    return db.query(Usuario).all()
+    usuarios = db.query(Usuario).all()
+    data = [
+        UsuarioResponse.model_validate(usuario).model_dump(mode="json")
+        for usuario in usuarios
+    ]
+    return success_response(data=data, message="Listado de usuarios")
 
 
-@router.get("/{usuario_id}", response_model=UsuarioResponse)
+@router.get("/{usuario_id}")
 def obtener_usuario(usuario_id: UUID, db: Session = Depends(get_db)):
     usuario = db.query(Usuario).filter(Usuario.id_usuario == usuario_id).first()
-
     if not usuario:
-        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        raise NotFoundError("Usuario no encontrado")
+    data = UsuarioResponse.model_validate(usuario).model_dump(mode="json")
+    return success_response(data=data, message="Usuario encontrado")
 
-    return usuario
 
-
-@router.post("", response_model=UsuarioResponse, status_code=201)
+@router.post("", status_code=201)
 def crear_usuario(dato: UsuarioCreate, db: Session = Depends(get_db)):
-
-    # validar que no exista el correo
-    existe = db.query(Usuario).filter(Usuario.email == dato.email).first()
-
-    if existe:
-        raise HTTPException(
-            status_code=400,
-            detail="El correo ya está registrado",
-        )
-
+    if db.query(Usuario).filter(Usuario.username == dato.username).first():
+        raise ConflictError("El nombre de usuario ya está registrado", status_code=400)
+    if db.query(Usuario).filter(Usuario.email == dato.email).first():
+        raise ConflictError("El correo ya está registrado", status_code=400)
     usuario = Usuario(
         nombre_completo=dato.nombre_completo,
         email=dato.email,
@@ -51,44 +51,44 @@ def crear_usuario(dato: UsuarioCreate, db: Session = Depends(get_db)):
         rol=dato.rol,
         activo=dato.activo,
     )
-
     db.add(usuario)
     db.commit()
     db.refresh(usuario)
+    data = UsuarioResponse.model_validate(usuario).model_dump(mode="json")
+    return success_response(data=data, message="Usuario creado exitosamente")
 
-    return usuario
 
-
-@router.put("/{usuario_id}", response_model=UsuarioResponse)
+@router.put("/{usuario_id}")
 def actualizar_usuario(
     usuario_id: UUID, dato: UsuarioUpdate, db: Session = Depends(get_db)
 ):
     usuario = db.query(Usuario).filter(Usuario.id_usuario == usuario_id).first()
-
     if not usuario:
-        raise HTTPException(status_code=404, detail="Usuario no encontrado")
-
-    for key, value in dato.model_dump(exclude_unset=True).items():
+        raise NotFoundError("Usuario no encontrado")
+    update = dato.model_dump(exclude_unset=True)
+    if "password" in update and update["password"]:
+        update["password"] = hash_password(update["password"])
+    for key, value in update.items():
         setattr(usuario, key, value)
-
     db.commit()
     db.refresh(usuario)
+    data = UsuarioResponse.model_validate(usuario).model_dump(mode="json")
+    return success_response(data=data, message="Usuario actualizado exitosamente")
 
-    return usuario
 
-
-@router.put("/{usuario_id}", status_code=204)
-def desactivar_usuario(usuario_id: UUID, db: Session = Depends(get_db)):
+@router.put("/{usuario_id}")
+def desactivar_usuario(
+    usuario_id: UUID, dato: UsuarioUpdate, db: Session = Depends(get_db)
+):
     usuario = db.query(Usuario).filter(Usuario.id_usuario == usuario_id).first()
-
     if not usuario:
-        raise HTTPException(status_code=404, detail="Usuario no encontrado")
-
+        raise NotFoundError("Usuario no encontrado")
     if not usuario.activo:
-        raise HTTPException(status_code=400, detail="El usuario ya está inactivo")
-
-    usuario.activo = False
-
+        raise ConflictError("El usuario ya está inactivo")
+    update = dato.model_dump(exclude_unset=True)
+    for key, value in update.items():
+        setattr(usuario, key, value)
     db.commit()
-
-    return None
+    db.refresh(usuario)
+    db.commit()
+    return success_response(message="Usuario desactivado exitosamente")

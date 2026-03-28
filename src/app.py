@@ -6,7 +6,16 @@ Aplicación FastAPI. Ejecutar con:
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.exceptions import HTTPException, RequestValidationError
 
+from src.core.exceptions import AppException
+from src.core.error_handlers import (
+    app_exception_handler,
+    generic_exception_handler,
+    http_exception_handler,
+    validation_exception_handler,
+)
+from src.core.responses import success_response
 from src.database.config import create_tables
 from src.endpoints import (
     categorias,
@@ -19,6 +28,7 @@ from src.endpoints import (
     mesas,
     reservaciones,
     usuarios,
+    login,
 )
 
 # Importar modelos para que Base.metadata los conozca
@@ -47,6 +57,13 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Manejadores globales de excepciones (estructura de respuesta unificada)
+app.add_exception_handler(AppException, app_exception_handler)
+app.add_exception_handler(HTTPException, http_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(Exception, generic_exception_handler)
+
+app.include_router(login.router)
 app.include_router(usuarios.router)
 app.include_router(categorias.router)
 app.include_router(clientes.router)
