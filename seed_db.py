@@ -118,6 +118,8 @@ def seed_categorias(db, admin):
         else:
             print(f" Categoría '{cat['descripcion']}' ya existe")
 
+    db.commit()
+
 
 def seed_platos(db, admin):
 
@@ -152,6 +154,8 @@ def seed_platos(db, admin):
         else:
             print(f" Plato '{plato['nombre']}' ya existe")
 
+    db.commit()
+
 
 def seed_clientes(db, admin):
 
@@ -174,6 +178,8 @@ def seed_clientes(db, admin):
         else:
             print(f" Cliente {cliente['documento']} ya existe")
 
+    db.commit()
+
 
 def seed_mesas(db, admin):
 
@@ -192,6 +198,8 @@ def seed_mesas(db, admin):
         else:
             print(f" Mesa {mesa['numero_mesa']} ya existe")
 
+    db.commit()
+
 
 def seed_metodos_pago(db, admin):
 
@@ -208,6 +216,8 @@ def seed_metodos_pago(db, admin):
             print(f" Método de pago '{metodo['nombre']}' creado")
         else:
             print(f" Método de pago '{metodo['nombre']}' ya existe")
+
+    db.commit()
 
 
 def main():
@@ -227,7 +237,6 @@ def main():
             seed_mesas(db, admin)
             print("Sembrando métodos de pago...")
             seed_metodos_pago(db, admin)
-            db.commit()
             print("Seed completado.")
         finally:
             db.close()
