@@ -106,7 +106,7 @@ def seed_categorias(db, admin):
 
     for cat in CATEGORIAS_INICIALES:
         existe = db.query(Categoria).filter_by(descripcion=cat["descripcion"]).first()
-
+        print(f"Usuario: {admin.id_usuario}")
         if not existe:
             nueva_categoria = Categoria(
                 descripcion=cat["descripcion"],
