@@ -78,4 +78,4 @@ app.include_router(reservaciones.router)
 
 @app.get("/")
 def inicio():
-    return {"mensaje": "API para restaurante", "docs": "/docs"}
+    return success_response(data={"mensaje": "API para restaurante", "docs": "/docs"})
