@@ -102,13 +102,7 @@ def get_or_create_admin(db) -> Usuario:
     return admin
 
 
-def seed_categorias(db):
-    # Buscar usuario admin (necesario para FK)
-    admin = db.query(Usuario).filter_by(username="admin").first()
-
-    if not admin:
-        print(" No existe usuario admin. Ejecuta primero get_or_create_admin")
-        return
+def seed_categorias(db, admin):
 
     for cat in CATEGORIAS_INICIALES:
         existe = db.query(Categoria).filter_by(descripcion=cat["descripcion"]).first()
@@ -125,12 +119,7 @@ def seed_categorias(db):
             print(f" Categoría '{cat['descripcion']}' ya existe")
 
 
-def seed_platos(db):
-    admin = db.query(Usuario).filter_by(username="admin").first()
-
-    if not admin:
-        print("❌ No existe usuario admin")
-        return
+def seed_platos(db, admin):
 
     for plato in PLATOS_INICIALES:
         # Buscar categoría por nombre
@@ -164,13 +153,7 @@ def seed_platos(db):
             print(f" Plato '{plato['nombre']}' ya existe")
 
 
-def seed_clientes(db):
-    # FK → usuario creador
-    admin = db.query(Usuario).filter_by(username="admin").first()
-
-    if not admin:
-        print(" No existe usuario admin. Ejecuta primero seed_usuarios")
-        return
+def seed_clientes(db, admin):
 
     for cliente in CLIENTES_INICIALES:
         # Puedes validar por documento (mejor opción)
@@ -192,12 +175,7 @@ def seed_clientes(db):
             print(f" Cliente {cliente['documento']} ya existe")
 
 
-def seed_mesas(db):
-    admin = db.query(Usuario).filter_by(username="admin").first()
-
-    if not admin:
-        print(" No existe usuario admin")
-        return
+def seed_mesas(db, admin):
 
     for mesa in MESAS_INICIALES:
         existe = db.query(Mesa).filter_by(numero_mesa=mesa["numero_mesa"]).first()
@@ -215,12 +193,7 @@ def seed_mesas(db):
             print(f" Mesa {mesa['numero_mesa']} ya existe")
 
 
-def seed_metodos_pago(db):
-    admin = db.query(Usuario).filter_by(username="admin").first()
-
-    if not admin:
-        print(" No existe usuario admin")
-        return
+def seed_metodos_pago(db, admin):
 
     for metodo in METODOS_PAGO_INICIALES:
         existe = db.query(MetodoPago).filter_by(nombre=metodo["nombre"]).first()
@@ -243,18 +216,17 @@ def main():
         try:
             print("Sembrando usuario admin (si no existe)...")
             admin = get_or_create_admin(db)
-            id_creacion = admin.id_usuario
 
             print("Sembrando categorías para platos...")
-            seed_categorias(db, id_creacion)
+            seed_categorias(db, admin)
             print("Sembrando platos...")
-            seed_platos(db, id_creacion)
+            seed_platos(db, admin)
             print("Sembrando consumidor final como cliente...")
-            seed_clientes(db, id_creacion)
+            seed_clientes(db, admin)
             print("Sembrado mesas...")
-            seed_mesas(db, id_creacion)
+            seed_mesas(db, admin)
             print("Sembrando métodos de pago...")
-            seed_metodos_pago(db, id_creacion)
+            seed_metodos_pago(db, admin)
             print("Seed completado.")
         finally:
             db.close()
