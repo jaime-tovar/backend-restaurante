@@ -21,6 +21,7 @@ La API permite administrar entidades como:
 - Facturas
 - Métodos de pago
 - Reservaciones
+- Usuarios
 
 ---
 
@@ -39,68 +40,24 @@ La API permite administrar entidades como:
 # 📁 Estructura del Proyecto
 
 ```
-.
-│   .env
-│   .gitignore
-│   init_db.py
-│   README.md
-│   requirements.txt
-│
-└── src
-    │   app.py
-    │   __init__.py
-    │
-    ├── crud
-    │       categoria.py
-    │       client.py
-    │       cliente.py
-    │       detalle_orden.py
-    │       factura.py
-    │       mesa.py
-    │       metodo_pago.py
-    │       orden.py
-    │       plato.py
-    │       reservacion.py
-    │
-    ├── database
-    │       config.py
-    │       __init__.py
-    │
-    ├── endpoints
-    │       categorias.py
-    │       clientes.py
-    │       detalle_orden.py
-    │       facturas.py
-    │       mesas.py
-    │       metodo_pago.py
-    │       orden.py
-    │       platos.py
-    │       reservaciones.py
-    │       __init__.py
-    │
-    ├── entities
-    │       categorias.py
-    │       clientes.py
-    │       detalle_orden.py
-    │       facturas.py
-    │       mesas.py
-    │       metodos_pago.py
-    │       ordenes.py
-    │       platos.py
-    │       reservaciones.py
-    │       __init__.py
-    │
-    └── schemas
-            categoria_schema.py
-            cliente_schema.py
-            detalle_orden_schema.py
-            factura_schema.py
-            mesa_schema.py
-            metodo_pago_schema.py
-            orden_schema.py
-            plato_schema.py
-            reservacion_schema.py
-            __init__.py
+├── src/
+│   ├── app.py              # Aplicación FastAPI y manejadores globales
+│   ├── core/               # Núcleo: excepciones y respuestas estándar
+│   │   ├── exceptions.py   # Excepciones de negocio (NotFound, Conflict, BadRequest…)
+│   │   ├── responses.py    # ApiResponse, ApiErrorDetail, success_response, error_response
+│   │   └── error_handlers.py # Manejadores que traducen excepciones → JSON estándar
+│   ├── database/          # Configuración PostgreSQL y sesión
+│   ├── entities/          # Modelos SQLAlchemy (tablas)
+│   ├── schemas/            # Modelos Pydantic (validación y serialización)
+│   ├── endpoints/          # Rutas FastAPI por recurso
+│   ├── crud/               # Cliente HTTP (httpx) que consume la API
+│   └── utils/              # Utilidades
+│       └── security.py     # Hash de contraseñas (bcrypt)
+├── main.py                 # Menú por consola que usa el CRUD contra la API
+├── init_db.py              # Crear tablas en la base de datos
+├── requirements.txt
+├── .github/workflows/ci.yml # Pipeline CI (lint + smoke test)
+└── README.md
 ```
 
 ---
@@ -168,7 +125,7 @@ Este script crea las tablas necesarias en la base de datos.
 Para iniciar el servidor:
 
 ```bash
-uvicorn src.app:app --reload
+python -m uvicorn src.app:app --reload --host 0.0.0.0 --port 8000
 ```
 
 La API estará disponible en:
@@ -186,6 +143,14 @@ FastAPI genera documentación automática.
 http://localhost:8000/docs
 
 ---
+
+## Video de demostración (examen 2)
+
+Demostración del pipeline en GitHub Actions (rama `dev`) y de migraciones/seeder/esquema en base de datos, según el enunciado del entregable Examen 2
+
+**Ver en YouTube:** [https://youtu.be/63ToPSw8hwM](https://youtu.be/63ToPSw8hwM)
+
+[![Miniatura – demostración](https://img.youtube.com/vi/63ToPSw8hwM/0.jpg)](https://youtu.be/63ToPSw8hwM)
 
 # 📚 Conceptos Aplicados
 
