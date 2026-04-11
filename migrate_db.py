@@ -52,15 +52,7 @@ def applied_migrations(conn):
 def run_sql_file(conn, path: Path):
     sql = path.read_text(encoding="utf-8")
 
-    statements = [
-        s.strip()
-        for s in sql.split(";")
-        if s.strip() and not s.strip().startswith("--")
-    ]
-
-    for stmt in statements:
-        conn.execute(text(stmt))
-
+    conn.execute(text(sql))  # ejecutar todo el archivo SQL de una vez
     conn.commit()
 
 

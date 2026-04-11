@@ -1,2 +1,0 @@
-ALTER TABLE ordenes
-ADD COLUMN comentario TEXT DEFAULT '';
