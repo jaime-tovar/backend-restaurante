@@ -12,11 +12,15 @@ class ReservacionBase(BaseModel):
 
 
 class ReservacionCreate(ReservacionBase):
-    pass
+    id_usuario_creacion: UUID
 
 
 class ReservacionUpdate(ReservacionBase):
-    pass
+    id_cliente: UUID | None = None
+    id_mesa: UUID | None = None
+    fecha: datetime | None = None
+    estado: str | None = None
+    id_usuario_edita: UUID
 
 
 class ReservacionResponse(ReservacionBase):

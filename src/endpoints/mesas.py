@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database.config import get_db
-from src.entities.mesas import Mesa
-from src.schemas.mesa_schema import MesaCreate, MesaUpdate, MesaResponse
+from src.entities.mesa import Mesa
+from src.schemas.mesa import MesaCreate, MesaUpdate, MesaResponse
 
 router = APIRouter(prefix="/mesas", tags=["Mesas"])
 

@@ -13,16 +13,24 @@ class FacturaBase(BaseModel):
 
 class FacturaCreate(FacturaBase):
     id_orden: UUID
-    pass
+    id_cliente: UUID
 
 
 class FacturaUpdate(FacturaBase):
-    pass
+    subtotal: float | None = None
+    descuento: float | None = None
+    total: float | None = None
+    id_metodo_pago: UUID | None = None
+    id_orden: UUID | None = None
+    id_cliente: UUID | None = None
+    id_usuario_edita: UUID
 
 
 class FacturaResponse(FacturaBase):
     id_factura: UUID
-    fecha_factura: datetime
+    fecha_emision: datetime
+    fecha_creacion: datetime
+    fecha_modificacion: datetime
 
     class Config:
         from_attributes = True

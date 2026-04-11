@@ -9,13 +9,6 @@ from src.database.config import Base
 
 
 class Factura(Base):
-    """
-    Modelo que representa la factura generada a partir de una orden.
-
-    Contiene información financiera como subtotal,
-    descuento y método de pago utilizado.
-    """
-
     __tablename__ = "facturas"
 
     id_factura = Column(
@@ -32,7 +25,11 @@ class Factura(Base):
         unique=True,
     )
 
-    fecha_factura = Column(
+    id_cliente = Column(
+        UUID(as_uuid=True), ForeignKey("clientes.id_cliente"), nullable=True
+    )
+
+    fecha_emision = Column(
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
@@ -48,6 +45,20 @@ class Factura(Base):
         nullable=False,
     )
 
+    # Auditoría
+    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
+    fecha_modificacion = Column(DateTime(timezone=True), onupdate=func.now())
+
+    id_usuario_creacion = Column(
+        UUID(as_uuid=True), ForeignKey("usuario.id_usuario"), nullable=False
+    )
+    id_usuario_edita = Column(
+        UUID(as_uuid=True), ForeignKey("usuario.id_usuario"), nullable=True
+    )
+
     # Relaciones
     orden = relationship("Orden", back_populates="factura")
     metodo_pago = relationship("MetodoPago", back_populates="facturas")
+    cliente = relationship("Cliente", back_populates="facturas")
+    usuario_creacion = relationship("Usuario", foreign_keys=[id_usuario_creacion])
+    usuario_edita = relationship("Usuario", foreign_keys=[id_usuario_edita])
