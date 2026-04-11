@@ -29,7 +29,7 @@ from src.utils.security import hash_password
 USUARIO_INICIAL = {
     "nombre_completo": "Administrador Genérico",
     "username": "admin",
-    "email": "admin@restaurante.local",
+    "email": "admin@restaurante.com",
     "telefono": "3001234567",
     "password": "Admin123!",
     "rol": "admin",
