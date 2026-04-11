@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database.config import get_db
-from src.entities.reservaciones import Reservacion
-from src.schemas.reservacion_schema import (
+from src.entities.reservacion import Reservacion
+from src.schemas.reservacion import (
     ReservacionCreate,
     ReservacionUpdate,
     ReservacionResponse,

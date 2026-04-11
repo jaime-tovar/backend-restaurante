@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database.config import get_db
-from src.entities.ordenes import Orden
-from src.schemas.orden_schema import (
+from src.entities.orden import Orden
+from src.schemas.orden import (
     OrdenCreate,
     OrdenUpdate,
     OrdenResponse,

@@ -1,20 +1,14 @@
 import uuid
 
-from sqlalchemy import Column, ForeignKey, Integer, Numeric
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, Numeric
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 from src.database.config import Base
 
 
 class DetalleOrden(Base):
-    """
-    Modelo que representa el detalle de una orden.
-
-    Cada registro indica qué plato pertenece a una orden
-    y la cantidad solicitada.
-    """
-
     __tablename__ = "detalle_orden"
 
     id_detalle_orden = Column(
@@ -39,6 +33,19 @@ class DetalleOrden(Base):
     cantidad = Column(Integer, nullable=False, default=1)
     precio_unitario = Column(Numeric(10, 2), nullable=False)
 
+    # Auditoría
+    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
+    fecha_modificacion = Column(DateTime(timezone=True), onupdate=func.now())
+
+    id_usuario_creacion = Column(
+        UUID(as_uuid=True), ForeignKey("usuario.id_usuario"), nullable=False
+    )
+    id_usuario_edita = Column(
+        UUID(as_uuid=True), ForeignKey("usuario.id_usuario"), nullable=True
+    )
+
     # Relaciones
     orden = relationship("Orden", back_populates="detalles")
     plato = relationship("Plato", back_populates="detalles")
+    usuario_creacion = relationship("Usuario", foreign_keys=[id_usuario_creacion])
+    usuario_edita = relationship("Usuario", foreign_keys=[id_usuario_edita])

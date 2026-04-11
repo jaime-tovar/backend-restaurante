@@ -13,7 +13,7 @@ class ClienteBase(BaseModel):
 
 
 class ClienteCreate(ClienteBase):
-    pass
+    id_usuario_creacion: UUID
 
 
 class ClienteUpdate(ClienteBase):
@@ -22,6 +22,7 @@ class ClienteUpdate(ClienteBase):
     email: EmailStr | None = None
     telefono: str | None = None
     activo: bool | None = None
+    id_usuario_edita: UUID
 
 
 class ClienteResponse(ClienteBase):

@@ -10,11 +10,13 @@ class CategoriaBase(BaseModel):
 
 
 class CategoriaCreate(CategoriaBase):
-    pass
+    id_usuario_creacion: UUID
 
 
 class CategoriaUpdate(CategoriaBase):
-    pass
+    descripcion: str | None = None
+    activo: bool | None = None
+    id_usuario_edita: UUID
 
 
 class CategoriaResponse(CategoriaBase):
