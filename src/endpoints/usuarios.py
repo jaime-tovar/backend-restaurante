@@ -76,7 +76,7 @@ def actualizar_usuario(
     return success_response(data=data, message="Usuario actualizado exitosamente")
 
 
-@router.put("/{usuario_id}")
+@router.put("/eliminar/{usuario_id}")
 def desactivar_usuario(
     usuario_id: UUID, dato: UsuarioUpdate, db: Session = Depends(get_db)
 ):
