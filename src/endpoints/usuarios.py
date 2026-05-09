@@ -1,3 +1,4 @@
+from datetime import timezone, datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
@@ -19,7 +20,7 @@ router = APIRouter(prefix="/usuarios", tags=["usuarios"])
 
 @router.get("")
 def listar_usuarios(db: Session = Depends(get_db)):
-    usuarios = db.query(Usuario).all()
+    usuarios = db.query(Usuario).filter(Usuario.fecha_eliminacion.is_(None)).all()
     data = [
         UsuarioResponse.model_validate(usuario).model_dump(mode="json")
         for usuario in usuarios
@@ -76,19 +77,20 @@ def actualizar_usuario(
     return success_response(data=data, message="Usuario actualizado exitosamente")
 
 
-@router.put("/eliminar/{usuario_id}")
-def desactivar_usuario(
-    usuario_id: UUID, dato: UsuarioUpdate, db: Session = Depends(get_db)
-):
+@router.delete("/{usuario_id}")
+def eliminar_usuario(usuario_id: UUID, db: Session = Depends(get_db)):
     usuario = db.query(Usuario).filter(Usuario.id_usuario == usuario_id).first()
+
     if not usuario:
         raise NotFoundError("Usuario no encontrado")
-    if not usuario.activo:
-        raise ConflictError("El usuario ya está inactivo")
-    update = dato.model_dump(exclude_unset=True)
-    for key, value in update.items():
-        setattr(usuario, key, value)
+
+    # Validar si ya fue eliminado
+    if usuario.fecha_eliminacion is not None:
+        raise ConflictError("El usuario ya fue eliminado", status_code=400)
+
+    usuario.fecha_eliminacion = datetime.now(timezone.utc)
+
     db.commit()
     db.refresh(usuario)
-    db.commit()
-    return success_response(message="Usuario desactivado exitosamente")
+
+    return success_response(data=None, message="Usuario eliminado exitosamente")
