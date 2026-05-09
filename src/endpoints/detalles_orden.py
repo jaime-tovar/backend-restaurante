@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from src.core.auth import get_current_user
 from src.database.config import get_db
 from src.entities.detalle_orden import DetalleOrden
 from src.schemas.detalle_orden import (
@@ -11,7 +12,11 @@ from src.schemas.detalle_orden import (
     DetalleOrdenResponse,
 )
 
-router = APIRouter(prefix="/detalle_orden", tags=["Detalle Orden"])
+router = APIRouter(
+    prefix="/detalle_orden",
+    tags=["Detalle Orden"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 @router.get("", response_model=list[DetalleOrdenResponse])
