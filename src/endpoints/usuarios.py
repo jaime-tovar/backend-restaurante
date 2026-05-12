@@ -19,6 +19,15 @@ from src.utils.security import hash_password
 router = APIRouter(prefix="/usuarios", tags=["usuarios"])
 
 
+@router.get("/existe")
+def existe_usuario(db: Session = Depends(get_db)):
+    existe = (
+        db.query(Usuario).filter(Usuario.fecha_eliminacion.is_(None)).first()
+        is not None
+    )
+    return success_response(data=existe, message="Validación de usuarios")
+
+
 @router.get("", dependencies=[Depends(get_current_user)])
 def listar_usuarios(db: Session = Depends(get_db)):
     usuarios = db.query(Usuario).filter(Usuario.fecha_eliminacion.is_(None)).all()
