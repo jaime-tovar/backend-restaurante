@@ -36,6 +36,7 @@ class DetalleOrden(Base):
     # Auditoría
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     fecha_modificacion = Column(DateTime(timezone=True), onupdate=func.now())
+    fecha_eliminacion = Column(DateTime(timezone=True), nullable=True)
 
     id_usuario_creacion = Column(
         UUID(as_uuid=True), ForeignKey("usuario.id_usuario"), nullable=False

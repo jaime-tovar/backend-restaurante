@@ -3,11 +3,14 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from src.core.auth import get_current_user
 from src.database.config import get_db
 from src.entities.mesa import Mesa
 from src.schemas.mesa import MesaCreate, MesaUpdate, MesaResponse
 
-router = APIRouter(prefix="/mesas", tags=["Mesas"])
+router = APIRouter(
+    prefix="/mesas", tags=["Mesas"], dependencies=[Depends(get_current_user)]
+)
 
 
 @router.get("", response_model=list[MesaResponse])

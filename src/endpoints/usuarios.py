@@ -1,8 +1,10 @@
+from datetime import timezone, datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from src.core.auth import get_current_user
 from src.core.exceptions import ConflictError, NotFoundError
 from src.core.responses import success_response
 from src.database.config import get_db
@@ -17,9 +19,18 @@ from src.utils.security import hash_password
 router = APIRouter(prefix="/usuarios", tags=["usuarios"])
 
 
-@router.get("")
+@router.get("/existe")
+def existe_usuario(db: Session = Depends(get_db)):
+    existe = (
+        db.query(Usuario).filter(Usuario.fecha_eliminacion.is_(None)).first()
+        is not None
+    )
+    return success_response(data=existe, message="Validación de usuarios")
+
+
+@router.get("", dependencies=[Depends(get_current_user)])
 def listar_usuarios(db: Session = Depends(get_db)):
-    usuarios = db.query(Usuario).all()
+    usuarios = db.query(Usuario).filter(Usuario.fecha_eliminacion.is_(None)).all()
     data = [
         UsuarioResponse.model_validate(usuario).model_dump(mode="json")
         for usuario in usuarios
@@ -27,7 +38,7 @@ def listar_usuarios(db: Session = Depends(get_db)):
     return success_response(data=data, message="Listado de usuarios")
 
 
-@router.get("/{usuario_id}")
+@router.get("/{usuario_id}", dependencies=[Depends(get_current_user)])
 def obtener_usuario(usuario_id: UUID, db: Session = Depends(get_db)):
     usuario = db.query(Usuario).filter(Usuario.id_usuario == usuario_id).first()
     if not usuario:
@@ -58,7 +69,7 @@ def crear_usuario(dato: UsuarioCreate, db: Session = Depends(get_db)):
     return success_response(data=data, message="Usuario creado exitosamente")
 
 
-@router.put("/{usuario_id}")
+@router.put("/{usuario_id}", dependencies=[Depends(get_current_user)])
 def actualizar_usuario(
     usuario_id: UUID, dato: UsuarioUpdate, db: Session = Depends(get_db)
 ):
@@ -76,19 +87,16 @@ def actualizar_usuario(
     return success_response(data=data, message="Usuario actualizado exitosamente")
 
 
-@router.put("/{usuario_id}")
-def desactivar_usuario(
-    usuario_id: UUID, dato: UsuarioUpdate, db: Session = Depends(get_db)
-):
+@router.delete("/{usuario_id}", dependencies=[Depends(get_current_user)])
+def eliminar_usuario(usuario_id: UUID, db: Session = Depends(get_db)):
     usuario = db.query(Usuario).filter(Usuario.id_usuario == usuario_id).first()
     if not usuario:
         raise NotFoundError("Usuario no encontrado")
-    if not usuario.activo:
-        raise ConflictError("El usuario ya está inactivo")
-    update = dato.model_dump(exclude_unset=True)
-    for key, value in update.items():
-        setattr(usuario, key, value)
+    # Validar si ya fue eliminado
+    if usuario.fecha_eliminacion is not None:
+        raise ConflictError("El usuario ya fue eliminado", status_code=400)
+    usuario.activo = False
+    usuario.fecha_eliminacion = datetime.now(timezone.utc)
     db.commit()
     db.refresh(usuario)
-    db.commit()
-    return success_response(message="Usuario desactivado exitosamente")
+    return success_response(data=None, message="Usuario eliminado exitosamente")

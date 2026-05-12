@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from src.core.auth import get_current_user
 from src.database.config import get_db
 from src.entities.metodo_pago import MetodoPago
 from src.schemas.metodo_pago import (
@@ -11,7 +12,11 @@ from src.schemas.metodo_pago import (
     MetodoPagoUpdate,
 )
 
-router = APIRouter(prefix="/metodos_pago", tags=["Metodos de Pago"])
+router = APIRouter(
+    prefix="/metodos_pago",
+    tags=["Metodos de Pago"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 @router.get("", response_model=list[MetodoPagoResponse])

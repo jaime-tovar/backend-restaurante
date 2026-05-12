@@ -3,11 +3,14 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from src.core.auth import get_current_user
 from src.database.config import get_db
 from src.entities.cliente import Cliente
 from src.schemas.cliente import ClienteCreate, ClienteUpdate, ClienteResponse
 
-router = APIRouter(prefix="/clientes", tags=["clientes"])
+router = APIRouter(
+    prefix="/clientes", tags=["clientes"], dependencies=[Depends(get_current_user)]
+)
 
 
 @router.get("", response_model=list[ClienteResponse])
