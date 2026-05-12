@@ -33,7 +33,7 @@ def _err_conexion(e):
 def _iniciar_api():
     import uvicorn
 
-    uvicorn.run("src.app:app", host="0.0.0.0", port=8000, log_level="warning")
+    uvicorn.run("src.app:app", host="127.0.0.1", port=8000, log_level="warning")
 
 
 def menu_login():

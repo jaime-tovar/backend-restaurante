@@ -1,6 +1,6 @@
 """
 Aplicación FastAPI. Ejecutar con:
-  python -m uvicorn src.app:app --reload --host 0.0.0.0 --port 8000
+  python -m uvicorn src.app:app --reload --host 127.0.0.1 --port 8000
 """
 
 from contextlib import asynccontextmanager
@@ -67,6 +67,27 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "Accept"],
 )
+
+
+@app.middleware("http")
+async def security_headers_middleware(request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+        "img-src 'self' data: https://fastapi.tiangolo.com; "
+        "font-src 'self' https://cdn.jsdelivr.net; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none'; "
+        "base-uri 'self';"
+    )
+    return response
+
 
 # Manejadores globales de excepciones (estructura de respuesta unificada)
 app.add_exception_handler(AppException, app_exception_handler)

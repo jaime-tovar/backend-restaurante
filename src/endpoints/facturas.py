@@ -3,11 +3,14 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from src.core.auth import get_current_user
 from src.database.config import get_db
 from src.entities.factura import Factura
 from src.schemas.factura import FacturaCreate, FacturaUpdate, FacturaResponse
 
-router = APIRouter(prefix="/facturas", tags=["Facturas"])
+router = APIRouter(
+    prefix="/facturas", tags=["Facturas"], dependencies=[Depends(get_current_user)]
+)
 
 
 @router.get("", response_model=list[FacturaResponse])
