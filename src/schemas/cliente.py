@@ -5,6 +5,7 @@ from pydantic import BaseModel, EmailStr
 
 
 class ClienteBase(BaseModel):
+    documento: str
     nombre: str
     apellido: str
     email: EmailStr
@@ -17,6 +18,7 @@ class ClienteCreate(ClienteBase):
 
 
 class ClienteUpdate(ClienteBase):
+    documento: str | None = None
     nombre: str | None = None
     apellido: str | None = None
     email: EmailStr | None = None
@@ -28,7 +30,7 @@ class ClienteUpdate(ClienteBase):
 class ClienteResponse(ClienteBase):
     id_cliente: UUID
     fecha_creacion: datetime
-    fecha_modificacion: datetime
+    fecha_modificacion: datetime | None = None
 
     class Config:
         from_attributes = True
