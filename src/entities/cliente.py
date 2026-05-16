@@ -15,11 +15,11 @@ class Cliente(Base):
     id_cliente = Column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True
     )
-    documento = Column(String(20), nullable=False)
-    nombre = Column(String(30), nullable=False)
-    apellido = Column(String(30), nullable=False)
-    email = Column(String(30), nullable=True)
-    telefono = Column(String(20), nullable=False)
+    documento = Column(String(50), nullable=False)
+    nombre = Column(String(50), nullable=False)
+    apellido = Column(String(50), nullable=False)
+    email = Column(String(125), nullable=True)
+    telefono = Column(String(30), nullable=False)
     activo = Column(Boolean, default=True)
 
     # Auditoría
