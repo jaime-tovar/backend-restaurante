@@ -14,7 +14,7 @@ class Mesa(Base):
     id_mesa = Column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True
     )
-    numero_mesa = Column(Integer, nullable=False, unique=True)
+    numero_mesa = Column(Integer, nullable=False)
     capacidad = Column(Integer, nullable=False)
     estado = Column(String(20), nullable=False, default="disponible")
 

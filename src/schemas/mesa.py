@@ -24,7 +24,7 @@ class MesaUpdate(MesaBase):
 class MesaResponse(MesaBase):
     id_mesa: UUID
     fecha_creacion: datetime
-    fecha_modificacion: datetime
+    fecha_modificacion: datetime | None
 
     class Config:
         from_attributes = True

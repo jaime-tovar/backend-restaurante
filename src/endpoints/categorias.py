@@ -20,9 +20,9 @@ router = APIRouter(
 )
 
 
-@router.get("")
+@router.get("", dependencies=[Depends(get_current_user)])
 def listar_categorias(db: Session = Depends(get_db)):
-    categorias = db.query(Categoria).filter(Categoria.activo == True).all()
+    categorias = db.query(Categoria).filter(Categoria.fecha_eliminacion.is_(None)).all()
     data = [
         CategoriaResponse.model_validate(categoria).model_dump(mode="json")
         for categoria in categorias
@@ -30,7 +30,7 @@ def listar_categorias(db: Session = Depends(get_db)):
     return success_response(data=data, message="Listado de categorías")
 
 
-@router.get("/{categoria_id}")
+@router.get("/{categoria_id}", dependencies=[Depends(get_current_user)])
 def obtener_categoria(categoria_id: UUID, db: Session = Depends(get_db)):
     categoria = (
         db.query(Categoria).filter(Categoria.id_categoria == categoria_id).first()
@@ -42,7 +42,7 @@ def obtener_categoria(categoria_id: UUID, db: Session = Depends(get_db)):
     return success_response(data=categoria, message="Categoría encontrada")
 
 
-@router.post("")
+@router.post("", dependencies=[Depends(get_current_user)])
 def crear_categoria(dato: CategoriaCreate, db: Session = Depends(get_db)):
     if db.query(Categoria).filter(Categoria.descripcion == dato.descripcion).first():
         raise ConflictError(
@@ -60,7 +60,7 @@ def crear_categoria(dato: CategoriaCreate, db: Session = Depends(get_db)):
     return success_response(data=data, message="Categoría creada exitosamente")
 
 
-@router.put("/{categoria_id}")
+@router.put("/{categoria_id}", dependencies=[Depends(get_current_user)])
 def actualizar_categoria(
     categoria_id: UUID,
     dato: CategoriaUpdate,
@@ -81,7 +81,7 @@ def actualizar_categoria(
     )
 
 
-@router.delete("/{categoria_id}")
+@router.delete("/{categoria_id}", dependencies=[Depends(get_current_user)])
 def eliminar_categoria(categoria_id: UUID, db: Session = Depends(get_db)):
     categoria = (
         db.query(Categoria).filter(Categoria.id_categoria == categoria_id).first()

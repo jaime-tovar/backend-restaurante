@@ -22,7 +22,7 @@ class MetodoPagoUpdate(MetodoPagoBase):
 class MetodoPagoResponse(MetodoPagoBase):
     id_metodo_pago: UUID
     fecha_creacion: datetime
-    fecha_modificacion: datetime
+    fecha_modificacion: datetime | None
 
     class Config:
         from_attributes = True
