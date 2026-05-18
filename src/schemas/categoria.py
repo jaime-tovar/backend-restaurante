@@ -26,3 +26,11 @@ class CategoriaResponse(CategoriaBase):
 
     class Config:
         from_attributes = True
+
+
+class CategoriaSimpleResponse(BaseModel):
+    id_categoria: UUID
+    descripcion: str
+
+    class Config:
+        from_attributes = True

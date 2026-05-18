@@ -30,6 +30,16 @@ def listar_categorias(db: Session = Depends(get_db)):
     return success_response(data=data, message="Listado de categorías")
 
 
+@router.get("/activas", dependencies=[Depends(get_current_user)])
+def listar_categorias_activas(db: Session = Depends(get_db)):
+    categorias = db.query(Categoria).filter(Categoria.activo.is_(True)).all()
+    data = [
+        CategoriaResponse.model_validate(categoria).model_dump(mode="json")
+        for categoria in categorias
+    ]
+    return success_response(data=data, message="Listado de categorías")
+
+
 @router.get("/{categoria_id}", dependencies=[Depends(get_current_user)])
 def obtener_categoria(categoria_id: UUID, db: Session = Depends(get_db)):
     categoria = (

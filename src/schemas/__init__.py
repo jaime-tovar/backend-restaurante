@@ -2,6 +2,7 @@ from src.schemas.categoria import (
     CategoriaCreate,
     CategoriaUpdate,
     CategoriaResponse,
+    CategoriaSimpleResponse,
 )
 from src.schemas.cliente import ClienteCreate, ClienteUpdate, ClienteResponse
 from src.schemas.detalle_orden import DetalleOrdenCreate, DetalleOrdenResponse
@@ -50,4 +51,5 @@ __all__ = [
     "UsuarioCreate",
     "UsuarioResponse",
     "UsuarioUpdate",
+    "CategoriaSimpleResponse",
 ]

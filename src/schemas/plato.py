@@ -3,6 +3,7 @@ from decimal import Decimal
 from uuid import UUID
 
 from pydantic import BaseModel, field_validator
+from src.schemas.categoria import CategoriaSimpleResponse
 
 
 class PlatoBase(BaseModel):
@@ -34,7 +35,9 @@ class PlatoUpdate(PlatoBase):
 class PlatoResponse(PlatoBase):
     id_plato: UUID
     fecha_creacion: datetime
-    fecha_modificacion: datetime
+    fecha_modificacion: datetime | None
+
+    categoria: CategoriaSimpleResponse
 
     class Config:
         from_attributes = True
