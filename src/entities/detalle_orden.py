@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, Numeric
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, Numeric, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -32,6 +32,7 @@ class DetalleOrden(Base):
 
     cantidad = Column(Integer, nullable=False, default=1)
     precio_unitario = Column(Numeric(10, 2), nullable=False)
+    activo = Column(Boolean, default=True)
 
     # Auditoría
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())

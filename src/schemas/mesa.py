@@ -28,3 +28,11 @@ class MesaResponse(MesaBase):
 
     class Config:
         from_attributes = True
+
+
+class MesaSimpleResponse(BaseModel):
+    id_mesa: UUID
+    numero_mesa: int
+
+    class Config:
+        from_attributes = True
